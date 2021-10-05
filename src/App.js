@@ -7,6 +7,8 @@ import { Contact, ContactsFilter } from './components/Contact';
 
 import arrContacts from './data/contacts.json';
 
+import s from './App.module.css';
+
 class App extends Component {
   state = {
     contacts: arrContacts,
@@ -24,7 +26,15 @@ class App extends Component {
 
     contacts.find((contact) => contact.name === name)
       ? alert(`${name} ${alertString}`)
-      : this.setState(({ contacts }) => ({ contacts: [contact, ...contacts] }));
+      : this.setState(({ contacts }) => ({
+          contacts: [contact, ...contacts],
+        }));
+
+    contacts.find((contact) => contact.number === number)
+      ? alert(`${number} ${alertString}`)
+      : this.setState(({ contacts }) => ({
+          contacts: [contact, ...contacts],
+        }));
   };
 
   removeContact = (contactId) => {
@@ -61,8 +71,10 @@ class App extends Component {
         </Section>
 
         <Section title={'Contacts'}>
-          <ContactsFilter value={filter} onChange={this.changeFilter} />
-          <Contact contacts={visibleContacts} onDelete={this.removeContact} />
+          <div className={s.container}>
+            <ContactsFilter value={filter} onChange={this.changeFilter} />
+            <Contact contacts={visibleContacts} onDelete={this.removeContact} />
+          </div>
         </Section>
       </>
     );

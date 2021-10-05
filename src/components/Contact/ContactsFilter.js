@@ -1,10 +1,16 @@
 import PropTypes from 'prop-types';
+import s from './ContactsFilter.module.css';
 
 const ContactsFilter = ({ value, onChange }) => {
   return (
-    <label>
+    <label className={s.label}>
       Filter contacts by name
-      <input type="text" value={value} onChange={onChange} />
+      <input
+        type="text"
+        value={value}
+        onChange={onChange}
+        className={s.input}
+      />
     </label>
   );
 };
