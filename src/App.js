@@ -1,10 +1,9 @@
 import { Component } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import shortid from 'shortid';
 
 import Section from './components/Section';
 import Form from './components/Form';
-import Contact from './components/Contact';
-import ContactsFilter from './components/Contact/ContactsFilter';
+import { Contact, ContactsFilter } from './components/Contact';
 
 import arrContacts from './data/contacts.json';
 
@@ -17,26 +16,32 @@ class App extends Component {
   addContact = ({ name, number }) => {
     const { contacts } = this.state;
     const contact = {
-      id: uuidv4(),
+      id: shortid.generate(),
       name,
       number,
     };
-    const alert = 'is already in contacts';
+    const alertString = 'is already in contacts';
 
     contacts.find((contact) => contact.name === name)
-      ? alert(`${name} ${alert}`)
-      : contacts.find((contact) => contact.number === number)
-      ? alert(`${number} ${alert}`)
+      ? alert(`${name} ${alertString}`)
       : this.setState(({ contacts }) => ({ contacts: [contact, ...contacts] }));
   };
 
+  removeContact = (contactId) => {
+    this.setState((prevState) => ({
+      contacts: prevState.contacts.filter(
+        (contact) => contact.id !== contactId,
+      ),
+    }));
+  };
+
   changeFilter = (e) => {
-    this.state({ filter: e.target.value });
+    this.setState({ filter: e.target.value });
   };
 
   filterContacts = () => {
     const { contacts, filter } = this.state;
-    const normalizedFilter = filter.toLowerCase;
+    const normalizedFilter = filter.toLowerCase();
 
     return contacts
       .filter((contact) =>
@@ -46,9 +51,9 @@ class App extends Component {
   };
 
   render() {
-    const { contacts } = this.state;
+    // const { contacts } = this.state;
     const { filter } = this.state;
-    // const visibleContacts = this.filterContacts();
+    const visibleContacts = this.filterContacts();
     return (
       <>
         <Section title={'Phonebook'}>
@@ -57,7 +62,7 @@ class App extends Component {
 
         <Section title={'Contacts'}>
           <ContactsFilter value={filter} onChange={this.changeFilter} />
-          <Contact contacts={contacts} />
+          <Contact contacts={visibleContacts} onDelete={this.removeContact} />
         </Section>
       </>
     );
