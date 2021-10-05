@@ -23,11 +23,10 @@ class App extends Component {
       number,
     };
 
-    const alertString = 'is already in contacts';
     contacts.find((contact) => contact.name === name)
-      ? alert(`${name} ${alertString}`)
+      ? alert(`${name} is already in contacts`)
       : contacts.find((contact) => contact.number === number)
-      ? alert(`${number} ${alertString}`)
+      ? alert(`${number} is already in contacts`)
       : this.setState(({ contacts }) => ({
           contacts: [contact, ...contacts],
         }));
